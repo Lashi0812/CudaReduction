@@ -1,0 +1,48 @@
+{
+    "name": "CUTLASS",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": ".."
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "eamodio.gitlens",
+                "streetsidesoftware.code-spell-checker",
+                "NVIDIA.nsight-vscode-edition",
+                "augustocdias.tasks-shell-input",
+                "James-Yu.latex-workshop",
+                "llvm-vs-code-extensions.vscode-clangd",
+                "BazelBuild.vscode-bazel",
+                "yzhang.markdown-all-in-one",
+                "tamasfe.even-better-toml",
+                "StackBuild.bazel-stack-vscode",
+                "ionutvmi.path-autocomplete"
+            ],
+            "settings": {
+                "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+                "jupyter.debugJustMyCode": false
+            }
+        }
+    },
+    "features": {
+        "./zsh-plugins": {
+            "plugins": "zsh-syntax-highlighting zsh-autosuggestions bazel",
+            "omzPlugins": "https://github.com/zsh-users/zsh-syntax-highlighting https://github.com/zsh-users/zsh-autosuggestions"
+        }
+    },
+    "mounts": [
+        "source=/mnt/drive/data,target=/mnt/data,type=bind,consistency=cached",
+        "source=projectname-bashhistory,target=/commandhistory,type=volume"
+    ],
+    "runArgs": [
+        "--gpus",
+        "all"
+    ],
+    "capAdd": [
+        "SYS_PTRACE"
+    ],
+    "securityOpt": [
+        "seccomp=unconfined"
+    ]
+}

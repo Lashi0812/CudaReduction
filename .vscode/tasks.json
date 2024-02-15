@@ -1,0 +1,36 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"label": "Generate the Compile Command",
+			"command": "source activate nlp && bazel run @hedron_compile_commands//:refresh_all",
+			"options": {
+				"cwd": "${workspaceFolder}"
+			}
+		},
+		{
+			"type": "shell",
+			"label": "Genrule for python configure",
+			"command": "source activate nlp && bazel build @local_config_python//:python_include",
+			"options": {
+				"cwd": "${workspaceFolder}"
+			}
+		},
+		{
+			"label": "Configure Clangd",
+			"type": "shell",
+			"dependsOrder": "sequence",
+			"dependsOn":[
+				"Generate the Compile Command",
+				"Genrule for python configure"
+			]
+			
+		},
+		{
+			"type": "shell",
+			"label": "Bazle clean",
+			"command": "bazel clean --expunge"
+		}
+	]
+}

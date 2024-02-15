@@ -1,0 +1,22 @@
+# build --symlink_prefix=./out/bazel_build/bazel-
+build --nocheck_visibility
+# build --@xla//xla/python:enable_gpu=false
+common --experimental_repo_remote_exec
+# c++17 require by nanobind
+build --copt=-fvisibility=hidden
+build --copt=-Wno-sign-compare
+build --cxxopt=-std=c++17
+build --host_cxxopt=-std=c++17
+
+
+build --@xla//xla/python:enable_gpu=false
+build --action_env=TF_CUDA_VERSION=12
+build --action_env=TF_CUDNN_VERSION=8
+
+build:cuda --repo_env TF_NEED_CUDA=1
+build:cuda --repo_env TF_NCCL_USE_STUB=1
+build:cuda --action_env TF_CUDA_COMPUTE_CAPABILITIES="sm_80"
+build:cuda --crosstool_top=@local_config_cuda//crosstool:toolchain
+build:cuda --@local_config_cuda//:enable_cuda
+build:cuda --linkopt=-Wl,--disable-new-dtags 
+build --config=cuda
