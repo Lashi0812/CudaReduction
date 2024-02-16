@@ -41,6 +41,10 @@ RUN mkdir ~/miniconda3 && \
 COPY .devcontainer/environment.yml /workspace/environment.yml
 RUN ~/miniconda3/bin/conda env create -f /workspace/environment.yml
 
+#* install nsight sys 2023
+RUN curl -o /tmp/nsys.deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/nsight-systems-2023.3.3_2023.3.3.42-1_amd64.deb && \
+    apt install -y /tmp/nsys.deb
+
 # set cuda env in .zshrc
 RUN echo 'export PATH=/usr/local/cuda-12.2/bin${PATH:+:${PATH}}' >> /root/.zshrc && \
     echo 'export LD_LIBRARY_PATH=/usr/local/cuda-12.2/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}' >> /root/.zshrc && \

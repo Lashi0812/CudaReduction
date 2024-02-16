@@ -1,15 +1,16 @@
-load("@local_config_cuda//cuda:build_defs.bzl", "cuda_header_library", "if_cuda")
+# load("@local_config_cuda//cuda:build_defs.bzl", "cuda_header_library")
 
 package(default_visibility = ["//visibility:public"])
 
-cuda_header_library(
+cc_library(
     name = "cutlass",
-    hdrs = if_cuda(glob([
-        "include/cutlass/**",
-    ])),
-    includes = if_cuda([
+    includes = [
         "include",
-    ]),
-    strip_include_prefix = "include",
+    ],
+    textual_hdrs = glob(
+        [
+            "include/cutlass/**"
+        ],
+    ),    
     visibility = ["//visibility:public"],
 )

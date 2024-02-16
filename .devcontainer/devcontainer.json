@@ -17,7 +17,9 @@
                 "yzhang.markdown-all-in-one",
                 "tamasfe.even-better-toml",
                 "StackBuild.bazel-stack-vscode",
-                "ionutvmi.path-autocomplete"
+                "ionutvmi.path-autocomplete",
+                "ms-toolsai.jupyter",
+                "ms-python.python"
             ],
             "settings": {
                 "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",

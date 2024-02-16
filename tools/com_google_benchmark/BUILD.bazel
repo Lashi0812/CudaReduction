@@ -1,0 +1,11 @@
+cc_library(
+    name = "benchmark",
+    srcs = glob([
+        "src/*.h",
+        "src/*.cc",
+    ]),
+    hdrs = glob(["include/benchmark/*.h"]),
+    copts = ["-DHAVE_POSIX_REGEX"],  # HAVE_STD_REGEX didn't work.
+    includes = ["include"],
+    visibility = ["//visibility:public"],
+)

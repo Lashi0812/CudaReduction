@@ -1,0 +1,12 @@
+load("@local_config_cuda//cuda:build_defs.bzl", "cuda_default_copts")
+
+cc_binary(
+    name = "test",
+    srcs = ["test.cu.cc"],
+    copts = cuda_default_copts(),
+    linkopts = ["-lm"],
+    deps = [
+        "@local_config_cuda//cuda:cuda_headers",
+        "@local_config_cuda//cuda:cudart",
+    ],
+)

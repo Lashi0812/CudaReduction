@@ -15,15 +15,5 @@ def repo():
         urls = tf_mirror_urls("https://github.com/hedronvision/bazel-compile-commands-extractor/archive/{commit}.tar.gz".format(commit = COMMIT)),
         strip_prefix = "bazel-compile-commands-extractor-{commit}".format(commit = COMMIT),
         sha256 = SHA256,
-        # patch_file = [
-        #     "//tools/compile_command_extractor:gen_command.patch"
-        # ]
     )
     
-# def repo():
-#     http_archive(
-#         name = "hedron_compile_commands",
-#         urls = ["https://github.com/hedronvision/bazel-compile-commands-extractor/archive/{commit}.tar.gz".format(commit = COMMIT)],
-#         strip_prefix = "bazel-compile-commands-extractor-{commit}".format(commit = COMMIT),
-#         sha256 = SHA256,
-#     )

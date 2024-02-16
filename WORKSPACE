@@ -16,7 +16,16 @@ xla_workspace1()
 load("@xla//:workspace0.bzl", "xla_workspace0")
 xla_workspace0()
 
+# # this can already available in local_cuda_config since it is part of cuda toolkit
+# load("//third_party/cccl:workspace.bzl", cccl = "repo")
+# cccl()
 
+load("//third_party/cutlass:workspace.bzl", cutlass = "repo")
+cutlass()
+
+# # using nvtx for profile
+# load("//tools/com_google_benchmark:workspace.bzl", com_google_benchmark = "repo")
+# com_google_benchmark()
 
 load("//tools/compile_command_extractor:workspace.bzl", hedron_workspace = "repo")
 hedron_workspace()

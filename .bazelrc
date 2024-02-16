@@ -20,3 +20,5 @@ build:cuda --crosstool_top=@local_config_cuda//crosstool:toolchain
 build:cuda --@local_config_cuda//:enable_cuda
 build:cuda --linkopt=-Wl,--disable-new-dtags 
 build --config=cuda
+
+build:nsys --run_under "nsys profile -o /workspaces/CudaReduction/profiles/"
