@@ -1,3 +1,4 @@
 *.cu.cc linguist-language=Cuda
-.devcontainer/* linguist-generated
-.vscode/* linguist-generated
+.devcontainer/** linguist-documentation
+.vscode/* linguist-documentation
+docs/* linguist-documentation
