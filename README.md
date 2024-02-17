@@ -19,3 +19,5 @@ Suppose we have the 2^N elements we launch N kernels each time we reduce the hal
 
 ## Algorithm 3: Block Reduction
 ![alt text](assets/reduce2.png)
+
+## Algorithm 4: Manual Unrolling
