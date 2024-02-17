@@ -46,6 +46,7 @@ int main(int argc, char *argv[]) {
     int N       = (argc > 1) ? atoi(argv[1]) : 1 << 24; // default 2**24
     int blocks  = (argc > 2) ? atoi(argv[2]) : 288;
     int threads = (argc > 3) ? atoi(argv[3]) : 256;
+    int nreps = (argc > 4) ? atoi(argv[4]) : 100;
 
     thrust::host_vector<float>   x(N);
     thrust::device_vector<float> dev_x(N);
@@ -56,9 +57,14 @@ int main(int argc, char *argv[]) {
     dev_x          = x; // H2D copy (N words)
     float host_sum = host_reduce1(x);
 
-    device_reduce1(dev_x, N, blocks, threads);
+    double gpu_sum = 0.0;
+    for (int i{0}; i < nreps; ++i) {
+        device_reduce1(dev_x, N, blocks, threads);
+        if (i == 0)
+            gpu_sum = dev_x[0];
+    }
 
-    double gpu_sum = dev_x[0]; // D2H copy (1 word)
+    // double gpu_sum = dev_x[0]; // D2H copy (1 word)
     // clang-format off
     std::cout << "Sum of " << N << " random Numbers in reduce1" 
               << "\n\thost : " << std::fixed << host_sum 

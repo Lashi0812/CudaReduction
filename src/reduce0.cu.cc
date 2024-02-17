@@ -36,10 +36,12 @@ void device_reduce0(thrust::device_vector<T> &d_x, const int N) {
         int blocks  = std::max(m / 256, 1);
         reduce0<<<blocks, threads>>>(d_x.data().get(), m);
     }
+    cudaDeviceSynchronize();
 }
 
 int main(int argc, char *argv[]) {
-    int N = (argc > 1) ? atoi(argv[1]) : 1 << 24; // default 2**24
+    int N     = (argc > 1) ? atoi(argv[1]) : 1 << 24; // default 2**24
+    int nreps = (argc > 2) ? atoi(argv[2]) : 100;
 
     thrust::host_vector<float>   x(N);
     thrust::device_vector<float> dev_x(N);
@@ -50,10 +52,13 @@ int main(int argc, char *argv[]) {
     dev_x          = x; // H2D copy (N words)
     float host_sum = host_reduce0(x);
 
-    device_reduce0(dev_x, N);
-    cudaDeviceSynchronize();
+    double gpu_sum = 0.0;
+    for (int i{0}; i < nreps; ++i) {
+        device_reduce0(dev_x, N);
+        if (i == 0)
+            gpu_sum = dev_x[0];
+    }
 
-    double gpu_sum = dev_x[0]; // D2H copy (1 word)
     // clang-format off
     std::cout << "Sum of " << N << " random Numbers " 
               << "\n\thost : " << host_sum 
