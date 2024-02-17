@@ -56,7 +56,6 @@ void device_reduce2(
     RANGE("device call");
     reduce2<<<blocks, threads, threads * sizeof(T)>>>(d_x.data().get(), d_y.data().get(), N);
     reduce2<<<1, blocks, blocks * sizeof(T)>>>(d_y.data().get(), d_x.data().get(), blocks);
-    cudaDeviceSynchronize();
 }
 
 int main(int argc, char *argv[]) {
@@ -81,6 +80,7 @@ int main(int argc, char *argv[]) {
         if (rep == 0)
             gpu_sum = dev_x[0];
     }
+    cudaDeviceSynchronize();
 
     // double gpu_sum = dev_x[0]; // D2H copy (1 word)
     // clang-format off

@@ -34,13 +34,22 @@ __global__ void reduce3(float *x, float *y, int m) {
 
     // last reduce with the warp
     if (tid < 32) {
-        volatile float *vsmem = partial_sum;
-        vsmem[tid] += vsmem[tid + 32];
-        vsmem[tid] += vsmem[tid + 16];
-        vsmem[tid] += vsmem[tid + 8];
-        vsmem[tid] += vsmem[tid + 4];
-        vsmem[tid] += vsmem[tid + 2];
-        vsmem[tid] += vsmem[tid + 1];
+        // volatile float *vsmem = partial_sum;
+        // vsmem[tid] += vsmem[tid + 32];
+        // vsmem[tid] += vsmem[tid + 16];
+        // vsmem[tid] += vsmem[tid + 8];
+        // vsmem[tid] += vsmem[tid + 4];
+        // vsmem[tid] += vsmem[tid + 2];
+        // vsmem[tid] += vsmem[tid + 1];
+
+        // clang-format off
+        partial_sum[tid]              += partial_sum[tid + 32]; __syncwarp(); // the syncwarps
+		if(tid < 16) partial_sum[tid] += partial_sum[tid + 16]; __syncwarp(); // are required
+		if(tid <  8) partial_sum[tid] += partial_sum[tid +  8]; __syncwarp(); // for devices of
+		if(tid <  4) partial_sum[tid] += partial_sum[tid +  4]; __syncwarp(); // CC = 7 and above
+		if(tid <  2) partial_sum[tid] += partial_sum[tid +  2]; __syncwarp(); // for CC < 7
+		if(tid <  1) partial_sum[tid] += partial_sum[tid +  1]; __syncwarp(); // they do nothing
+        // clang-format on
     }
     if (tid == 0)
         y[blockIdx.x] = partial_sum[0];
@@ -74,7 +83,6 @@ void device_reduce3(
     RANGE("device call");
     reduce3<<<blocks, threads, threads * sizeof(T)>>>(d_x.data().get(), d_y.data().get(), N);
     reduce3<<<1, blocks, blocks * sizeof(T)>>>(d_y.data().get(), d_x.data().get(), blocks);
-    cudaDeviceSynchronize();
 }
 
 int main(int argc, char *argv[]) {
@@ -99,7 +107,7 @@ int main(int argc, char *argv[]) {
         if (rep == 0)
             gpu_sum = dev_x[0];
     }
-
+    cudaDeviceSynchronize();
     // double gpu_sum = dev_x[0]; // D2H copy (1 word)
     // clang-format off
     std::cout << "Sum of " << N << " random Numbers in reduce3" 

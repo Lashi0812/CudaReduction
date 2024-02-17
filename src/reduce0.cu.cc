@@ -36,7 +36,6 @@ void device_reduce0(thrust::device_vector<T> &d_x, const int N) {
         int blocks  = std::max(m / 256, 1);
         reduce0<<<blocks, threads>>>(d_x.data().get(), m);
     }
-    cudaDeviceSynchronize();
 }
 
 int main(int argc, char *argv[]) {
@@ -58,6 +57,7 @@ int main(int argc, char *argv[]) {
         if (i == 0)
             gpu_sum = dev_x[0];
     }
+    cudaDeviceSynchronize();
 
     // clang-format off
     std::cout << "Sum of " << N << " random Numbers " 
