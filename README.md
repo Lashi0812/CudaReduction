@@ -7,7 +7,7 @@ In parallel computing, reduction operations involve combining elements of a data
 
 > [!NOTE]  
 > Use excalidraw extension in vscode for view the description for each algo in the [docs](docs/Reduction.excalidraw)
-> or use [online version](https://excalidraw.com/#json=dLMM6ZB8zCMZT8ZKQStc7,HI273yQF3QzvGIIqHmDXKw)
+> or use [online version](https://excalidraw.com/#json=8ZDNdVUQ9Pz-V2upj1vaU,QGzuCZVbugcCEf-ZI-Ping)
 
 
 ## Algorithm 1: Multi-Kernel Iterative Reduction
@@ -16,3 +16,6 @@ Suppose we have the 2^N elements we launch N kernels each time we reduce the hal
 
 ## Algorithm 2: Single-Kernel Iterative Reduction
 ![alt text](assets/reduce1.png)
+
+## Algorithm 3: Block Reduction
+![alt text](assets/reduce2.png)
