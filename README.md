@@ -21,3 +21,4 @@ Suppose we have the 2^N elements we launch N kernels each time we reduce the hal
 ![alt text](assets/reduce2.png)
 
 ## Algorithm 4: Manual Unrolling
+## Algorithm 5: Using Cooperative groups
