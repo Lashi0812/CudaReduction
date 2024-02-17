@@ -2,4 +2,5 @@ cc_library(
     name = "nv_tool_ext_header",
     hdrs = ["nvToolsExt.h"],
     deps = ["@local_config_cuda//cuda:cuda_headers"],
+    visibility = ["//visibility:public"],
 )

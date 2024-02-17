@@ -1,5 +1,5 @@
 {
-    "name": "CUTLASS",
+    "name": "CudaReduction",
     "build": {
         "dockerfile": "Dockerfile",
         "context": ".."
@@ -11,15 +11,14 @@
                 "streetsidesoftware.code-spell-checker",
                 "NVIDIA.nsight-vscode-edition",
                 "augustocdias.tasks-shell-input",
-                "James-Yu.latex-workshop",
                 "llvm-vs-code-extensions.vscode-clangd",
                 "BazelBuild.vscode-bazel",
                 "yzhang.markdown-all-in-one",
-                "tamasfe.even-better-toml",
                 "StackBuild.bazel-stack-vscode",
                 "ionutvmi.path-autocomplete",
                 "ms-toolsai.jupyter",
-                "ms-python.python"
+                "ms-python.python",
+                "pomdtr.excalidraw-editor"
             ],
             "settings": {
                 "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
