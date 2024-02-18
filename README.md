@@ -25,3 +25,4 @@ Suppose we have the 2^N elements we launch N kernels each time we reduce the hal
 ## [Algorithm 6: Warp Reduction](src/reduce5.cu.cc)
 ![alt text](assets/reduce5.png)
 ## [Algorithm 7: Using Warp Level function](src/reduce6.cu.cc)
+## [Algorithm 7: Vector Loading](src/reduce7.cu.cc)
