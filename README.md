@@ -7,18 +7,20 @@ In parallel computing, reduction operations involve combining elements of a data
 
 > [!NOTE]  
 > Use excalidraw extension in vscode for view the description for each algo in the [docs](docs/Reduction.excalidraw)
-> or use [online version](https://excalidraw.com/#json=uDflU_YdY6sXNm9elxcnA,TTUBFYSL-sM9IMbRRO1NCw)
+> or use [online version](https://excalidraw.com/#json=bQjqZix9VFbV9gD9UGDhu,lUej_Y3_1KasCv2wutfkIg)
 
 
-## Algorithm 1: Multi-Kernel Iterative Reduction
+## [Algorithm 1: Multi-Kernel Iterative Reduction](src/reduce0.cu.cc)
 Suppose we have the 2^N elements we launch N kernels each time we reduce the half number total number threads.Here we have 2^4 = 16 elements so we launch the 4 kernel and each time we launch half the threads
 ![alt text](assets/reduce0.png)
 
-## Algorithm 2: Single-Kernel Iterative Reduction
+## [Algorithm 2: Single-Kernel Iterative Reduction](src/reduce1.cu.cc)
 ![alt text](assets/reduce1.png)
 
-## Algorithm 3: Block Reduction
+## [Algorithm 3: Block Reduction](src/reduce2.cu.cc)
 ![alt text](assets/reduce2.png)
 
-## Algorithm 4: Manual Unrolling
-## Algorithm 5: Using Cooperative groups
+## [Algorithm 4: Manual Unrolling](src/reduce3.cu.cc)
+## [Algorithm 5: Using Cooperative groups](src/reduce4.cu.cc)
+## [Algorithm 6: Warp Reduction](src/reduce5.cu.cc)
+![alt text](assets/reduce5.png)
