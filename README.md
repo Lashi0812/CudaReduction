@@ -7,7 +7,7 @@ In parallel computing, reduction operations involve combining elements of a data
 
 > [!NOTE]  
 > Use excalidraw extension in vscode for view the description for each algo in the [docs](docs/Reduction.excalidraw)
-> or use [online version](https://excalidraw.com/#json=8ZDNdVUQ9Pz-V2upj1vaU,QGzuCZVbugcCEf-ZI-Ping)
+> or use [online version](https://excalidraw.com/#json=uDflU_YdY6sXNm9elxcnA,TTUBFYSL-sM9IMbRRO1NCw)
 
 
 ## Algorithm 1: Multi-Kernel Iterative Reduction
