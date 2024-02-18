@@ -72,3 +72,15 @@ cc_binary(
         "@local_config_cuda//cuda:cudart",
     ],
 )
+
+cc_binary(
+    name = "reduce6",
+    srcs = ["reduce6.cu.cc"],
+    copts = cuda_default_copts(),
+    linkopts = ["-lm"],
+    deps = [
+        "//include:nv_tool_ext_header",
+        "@local_config_cuda//cuda:cuda_headers",
+        "@local_config_cuda//cuda:cudart",
+    ],
+)

@@ -24,3 +24,4 @@ Suppose we have the 2^N elements we launch N kernels each time we reduce the hal
 ## [Algorithm 5: Using Cooperative groups](src/reduce4.cu.cc)
 ## [Algorithm 6: Warp Reduction](src/reduce5.cu.cc)
 ![alt text](assets/reduce5.png)
+## [Algorithm 7: Using Warp Level function](src/reduce6.cu.cc)

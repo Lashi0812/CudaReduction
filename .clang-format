@@ -2,7 +2,7 @@ Language: Cpp
 IndentWidth: 4
 ObjCBlockIndentWidth: 2
 ContinuationIndentWidth: 2
-ColumnLimit: 100
+ColumnLimit: 120
 AlignAfterOpenBracket: AlwaysBreak
 AlignTrailingComments: true
 AlignConsecutiveMacros: true
