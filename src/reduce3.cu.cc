@@ -1,3 +1,20 @@
+/*
+bazel run //src:reduce3
+
+Sum of 16777216 random Numbers in reduce3
+        host : 8389645.000000
+        GPU  : 8389645.000000
+
+* Use "Get nsys report" task  in tasks.json
+nsys profile --force-overwrite true -o profiles/reduce3.nsys-rep bazel-bin/src/reduce3 
+nsys stats --force-export true --timeunit microseconds --report nvtx_pushpop_sum profiles/reduce3.nsys-rep 
+
+  Time (%)  Total Time (us)  Instances   Avg (us)    Med (us)    Min (us)    Max (us)   StdDev (us)     Range   
+ --------  ---------------  ---------  ----------  ----------  ----------  ----------  -----------  -----------
+     99.8       188043.928          1  188043.928  188043.928  188043.928  188043.928        0.000  host call  
+      0.2          364.034        100       3.640       3.023       2.805      62.783        5.977  device call
+*/
+
 #include "cuda/include/thrust/device_vector.h"
 #include "cuda/include/thrust/host_vector.h"
 #include "include/nvToolsExt.h"
