@@ -1,9 +1,8 @@
 # build --symlink_prefix=./out/bazel_build/bazel-
 build --nocheck_visibility
-# build --@xla//xla/python:enable_gpu=false
 common --experimental_repo_remote_exec
 # c++17 require by nanobind
-build --copt=-fvisibility=hidden
+# build --copt=-fvisibility=hidden
 build --copt=-Wno-sign-compare
 build --cxxopt=-std=c++17
 build --host_cxxopt=-std=c++17
@@ -19,6 +18,7 @@ build:cuda --action_env TF_CUDA_COMPUTE_CAPABILITIES="sm_80"
 build:cuda --crosstool_top=@local_config_cuda//crosstool:toolchain
 build:cuda --@local_config_cuda//:enable_cuda
 build:cuda --linkopt=-Wl,--disable-new-dtags 
-build --config=cuda
 
-build:nsys --run_under "nsys profile -o /workspaces/CudaReduction/profiles/"
+build --flag_alias=cuda_archs=@rules_cuda//cuda:archs
+build:rules_cuda --cuda_archs=compute_89:compute_89,sm_89
+
