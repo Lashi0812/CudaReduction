@@ -1,17 +1,16 @@
 load("@rules_cuda//cuda:defs.bzl", "cuda_library")
-load("//benchmarks:rules.bzl", "nvbench_is_buildable")
 
 cuda_library(
     name = "example",
     srcs = ["example.cu"],
-    copts = ["-std=c++17","-O3"],
-    target_compatible_with = nvbench_is_buildable(),
+    copts = ["-std=c++17"],
     visibility = ["//visibility:public"],
     deps = [
         "@com_github_nvbench//:nvbench_include",
         "@com_github_nvbench//:nvbench_main",
         "@local_cuda//:cuda",
         "@rules_cuda//cuda:runtime",
+        "//include:nv_tool_ext_header"
     ],
     alwayslink = 1,
 )

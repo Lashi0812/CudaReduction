@@ -4,12 +4,18 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
         {
             "name": "CUDA C++: Launch",
             "type": "cuda-gdb",
             "request": "launch",
-            "program": "${workspaceFolder}/build/${input:exe}"
-        }
+            "debuggerPath": "/usr/local/cuda-12.2/bin/cuda-gdb",
+            "program": "${workspaceFolder}/bazel-bin/${input:exe}",
+            "initCommands": [
+                "set substitute-path /proc/self/cwd /workspaces/CudaReduction",
+                "set directories /workspaces/CudaReduction/benchmarks /workspaces/CudaReduction/src",
+            ]
+        },
     ],
     "inputs": [
         // Refer for command : https://github.com/microsoft/vscode/issues/109789
@@ -18,8 +24,8 @@
             "id": "exe",
             "command": "shellCommand.execute",
             "args": {
-                "command": "ls -F . | grep '*$' | sed 's/*$//'",
-                "cwd": "${workspaceFolder}/build",
+                "command": "ls -dF src/* benchmarks/* | grep '*$' | sed 's/*$//'",
+                "cwd": "${workspaceFolder}/bazel-bin/",
             }
         }
     ],

@@ -1,10 +1,12 @@
 #include <nvbench/nvbench.cuh>
 #include <random>
 
-#include "cuda/include/thrust/device_vector.h"
-#include "cuda/include/thrust/host_vector.h"
-#include "cuda/include/cooperative_groups.h"
-#include "cuda/include/cooperative_groups/reduce.h"
+#include <cuda/include/thrust/device_vector.h>
+#include <cuda/include/thrust/host_vector.h>
+#include <cuda/include/cooperative_groups.h>
+#include <cuda/include/cooperative_groups/reduce.h>
+#include <string>
+#include "include/nvToolsExt.h"
 
 namespace cg = cooperative_groups;
 
@@ -43,18 +45,24 @@ void init_data(thrust::host_vector<T> &x) {
 }
 
 void reduce7_benchmark(nvbench::state &state) {
-    const auto N       = state.get_int64("input_size");
-    const int  blocks  = 256;
-    const int  threads = 256;
+    auto      N       = state.get_int64("input_size");
+    const int blocks  = 256;
+    const int threads = 256;
 
     thrust::host_vector<float>   x(N);
     thrust::device_vector<float> dev_x(N);
     thrust::device_vector<float> dev_y(blocks);
 
+    // state.collect_dram_throughput();
     init_data(x);
     dev_x = x;
+    // state.collect_l1_hit_rates();
+    // state.collect_l2_hit_rates();
+    // state.collect_loads_efficiency();
+    // state.collect_stores_efficiency();
 
     state.exec([&N, &blocks, &threads, &dev_x, &dev_y](nvbench::launch &launch) {
+        RANGE(("kernel call" + std::to_string(N)).c_str());
         reduce7<<<blocks, threads, threads * sizeof(float), launch.get_stream()>>>(
           dev_x.data().get(), dev_y.data().get(), N);
         reduce7<<<1, blocks, blocks * sizeof(float), launch.get_stream()>>>(
@@ -63,4 +71,4 @@ void reduce7_benchmark(nvbench::state &state) {
 }
 NVBENCH_BENCH(reduce7_benchmark)
   .add_int64_power_of_two_axis("input_size", nvbench::range(14, 24))
-  .set_timeout(1); // Limit to one second per measurement.
+  .set_timeout(1); // Limit to one second per measurement.bazel-bin

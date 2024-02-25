@@ -15,6 +15,11 @@
 			"command": "bazel clean --expunge"
 		},
 		{
+			"label": "Create directory",
+			"type": "shell",
+			"command": "mkdir -p profiles/\"$(echo ${input:exe} | sed 's@/[^/]*$@@')\""
+		},
+		{
 			"label": "NSYS Profile the program",
 			"command": "nsys",
 			"args": [
@@ -23,11 +28,15 @@
 				"true",
 				"-o",
 				"profiles/${input:exe}.nsys-rep",
-				"bazel-bin/src/${input:exe}"
+				"bazel-bin/${input:exe}",
+				"${input:app_args}"
 			],
 			"options": {
 				"cwd": "${workspaceFolder}"
-			}
+			},
+			"dependsOn": [
+				"Create directory"
+			]
 		},
 		{
 			"label": "Print nvtx stats",
@@ -54,7 +63,32 @@
 				"NSYS Profile the program",
 				"Print nvtx stats"
 			]
-		}
+		},
+		{
+			"label": "Compute Profile for Executable",
+			"type": "shell",
+			"command": [
+				"ncu",
+				"-f",
+				"-o",
+				"./profiles/${input:exe}.ncu-rep",
+				"--config-file",
+				"on",
+				"--replay-mode",
+				"application",
+				"--config-file-path",
+				"./profiles/config/reduce.ncu-cfg",
+				"bazel-bin/${input:exe}",
+				"${input:app_args}"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"dependsOn": [
+				"Create directory"
+			],
+			"detail": "Select Executable to Profile",
+		},
 	],
 	"inputs": [
 		// Refer for command : https://github.com/microsoft/vscode/issues/109789
@@ -63,8 +97,8 @@
 			"id": "exe",
 			"command": "shellCommand.execute",
 			"args": {
-				"command": "ls -F . | grep '*$' | sed 's/*$//'",
-				"cwd": "${workspaceFolder}/bazel-bin/src",
+				"command": "ls -dF src/* benchmarks/* | grep '*$' | sed 's/*$//'",
+				"cwd": "${workspaceFolder}/bazel-bin/",
 				"description": "Select Executable to Run",
 			}
 		},
@@ -79,6 +113,12 @@
 			],
 			"default": "nanoseconds",
 			"description": "pick timeunit"
+		},
+		{
+			"type": "promptString",
+			"id": "app_args",
+			"default": "",
+			"description": "sepcify argument that pass to application"
 		}
 	]
 }

@@ -1,0 +1,3 @@
+[Launch-and-attach]
+-f
+--target-processes = all
