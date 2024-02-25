@@ -1,6 +1,7 @@
 # build --symlink_prefix=./out/bazel_build/bazel-
 build --nocheck_visibility
 common --experimental_repo_remote_exec
+build --experimental_cc_shared_library
 # c++17 require by nanobind
 # build --copt=-fvisibility=hidden
 build --copt=-Wno-sign-compare
