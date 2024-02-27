@@ -1,99 +1,77 @@
-load("@local_config_cuda//cuda:build_defs.bzl", "cuda_default_copts")
+load("//src:rules.bzl", "cuda_binary")
 
-cc_binary(
+cuda_binary(
     name = "reduce0",
     srcs = ["reduce0.cu.cc"],
-    copts = cuda_default_copts(),
-    linkopts = ["-lm"],
     deps = [
         "//include:nv_tool_ext_header",
-        "@local_config_cuda//cuda:cuda_headers",
-        "@local_config_cuda//cuda:cudart",
+        "@local_cuda//:cuda",
     ],
 )
 
-cc_binary(
+cuda_binary(
     name = "reduce1",
     srcs = ["reduce1.cu.cc"],
-    copts = cuda_default_copts(),
-    linkopts = ["-lm"],
     deps = [
         "//include:nv_tool_ext_header",
-        "@local_config_cuda//cuda:cuda_headers",
-        "@local_config_cuda//cuda:cudart",
+        "@local_cuda//:cuda",
     ],
 )
 
-cc_binary(
+cuda_binary(
     name = "reduce2",
     srcs = ["reduce2.cu.cc"],
-    copts = cuda_default_copts(),
-    linkopts = ["-lm"],
     deps = [
         "//include:nv_tool_ext_header",
-        "@local_config_cuda//cuda:cuda_headers",
-        "@local_config_cuda//cuda:cudart",
+        "@local_cuda//:cuda",
     ],
 )
 
-
-cc_binary(
+cuda_binary(
     name = "reduce3",
     srcs = ["reduce3.cu.cc"],
-    copts = cuda_default_copts(),
-    linkopts = ["-lm"],
     deps = [
         "//include:nv_tool_ext_header",
-        "@local_config_cuda//cuda:cuda_headers",
-        "@local_config_cuda//cuda:cudart",
+        "@local_cuda//:cuda",
     ],
 )
 
-cc_binary(
+cuda_binary(
     name = "reduce4",
     srcs = ["reduce4.cu.cc"],
-    copts = cuda_default_copts(),
-    linkopts = ["-lm"],
     deps = [
         "//include:nv_tool_ext_header",
-        "@local_config_cuda//cuda:cuda_headers",
-        "@local_config_cuda//cuda:cudart",
+        "@local_cuda//:cuda",
     ],
 )
 
-cc_binary(
+cuda_binary(
     name = "reduce5",
     srcs = ["reduce5.cu.cc"],
-    copts = cuda_default_copts(),
-    linkopts = ["-lm"],
     deps = [
         "//include:nv_tool_ext_header",
-        "@local_config_cuda//cuda:cuda_headers",
-        "@local_config_cuda//cuda:cudart",
+        "@local_cuda//:cuda",
     ],
 )
 
-cc_binary(
+cuda_binary(
     name = "reduce6",
     srcs = ["reduce6.cu.cc"],
-    copts = cuda_default_copts(),
-    linkopts = ["-lm"],
     deps = [
         "//include:nv_tool_ext_header",
-        "@local_config_cuda//cuda:cuda_headers",
-        "@local_config_cuda//cuda:cudart",
+        "@local_cuda//:cuda",
     ],
 )
 
-
-cc_binary(
+cuda_binary(
     name = "reduce7",
     srcs = ["reduce7.cu.cc"],
-    copts = cuda_default_copts(),
-    linkopts = ["-lm"],
+    ptxasopts = [
+        "-dlcm=ca",
+        "-v",
+    ],
     deps = [
         "//include:nv_tool_ext_header",
-        "@local_config_cuda//cuda:cuda_headers",
-        "@local_config_cuda//cuda:cudart",
+        "@local_cuda//:cuda",
     ],
 )
