@@ -66,10 +66,21 @@ cuda_binary(
 cuda_binary(
     name = "reduce7",
     srcs = ["reduce7.cu.cc"],
+    copts = ["-fmad=false"],
     ptxasopts = [
         "-dlcm=ca",
         "-v",
     ],
+    deps = [
+        "//include:nv_tool_ext_header",
+        "@local_cuda//:cuda",
+    ],
+)
+
+
+cuda_binary(
+    name = "reduce8",
+    srcs = ["reduce8.cu"],
     deps = [
         "//include:nv_tool_ext_header",
         "@local_cuda//:cuda",

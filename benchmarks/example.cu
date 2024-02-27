@@ -46,7 +46,7 @@ void init_data(thrust::host_vector<T> &x) {
 
 void reduce7_benchmark(nvbench::state &state) {
     auto      N       = state.get_int64("input_size");
-    const int blocks  = 256;
+    const int blocks  = 768;
     const int threads = 256;
 
     thrust::host_vector<float>   x(N);

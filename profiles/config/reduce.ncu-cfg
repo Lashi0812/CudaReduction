@@ -1,3 +1,5 @@
 [Launch-and-attach]
 -f
---target-processes = all
+--import-source = yes
+--section = ComputeWorkloadAnalysis,InstructionStats,LaunchStats,LoadMetrics,MemoryCheck,MemoryWorkloadAnalysis_Chart,MemoryWorkloadAnalysis_Tables,MemoryWorkloadAnalysis,Occupancy,SchedulerStats,SharedMemAnalysis,SourceCounters,SpeedOfLight_HierarchicalDoubleRooflineChart,SpeedOfLight_HierarchicalHalfRooflineChart,SpeedOfLight_HierarchicalSingleRooflineChart,SpeedOfLight_HierarchicalTensorRooflineChart,SpeedOfLight_RooflineChart,SpeedOfLight,StoreMetrics,WarpStateStats
+--section-folder-recursive = /workspaces/CudaReduction/profiles/sections

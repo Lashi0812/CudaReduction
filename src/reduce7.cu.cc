@@ -11,16 +11,33 @@ nsys stats --force-export true --timeunit microseconds --report nvtx_pushpop_sum
 profiles/reduce7.nsys-rep
 
 
-Time (%)  Total Time (us)  Instances   Avg (us)    Med (us)    Min (us)    Max (us)   StdDev (us)     Range   
+Time (%)  Total Time (us)  Instances   Avg (us)    Med (us)    Min (us)    Max (us)   StdDev (us)     Range
  --------  ---------------  ---------  ----------  ----------  ----------  ----------  -----------  -----------
-     99.8       190369.036          1  190369.036  190369.036  190369.036  190369.036        0.000  host call  
+     99.8       190369.036          1  190369.036  190369.036  190369.036  190369.036        0.000  host call
       0.2          383.991        100       3.840       2.979       2.790      78.158        7.536  device call
 */
+
+#define RUNTIME_API_CALL(apiFunctionCall)                           \
+    do {                                                            \
+        cudaError_t _status = apiFunctionCall;                      \
+        if (_status != cudaSuccess) {                               \
+            fprintf(                                                \
+              stderr,                                               \
+              "%s:%d: Error: Function %s failed with error: %s.\n", \
+              __FILE__,                                             \
+              __LINE__,                                             \
+              #apiFunctionCall,                                     \
+              cudaGetErrorString(_status));                         \
+                                                                    \
+            exit(EXIT_FAILURE);                                     \
+        }                                                           \
+    } while (0)
 
 #include "cuda/include/thrust/device_vector.h"
 #include "cuda/include/thrust/host_vector.h"
 #include "cuda/include/cooperative_groups.h"
 #include "cuda/include/cooperative_groups/reduce.h"
+#include <cuda/atomic>
 #include "include/nvToolsExt.h"
 #include <iostream>
 #include <random>
@@ -43,13 +60,14 @@ __global__ void reduce7(float const *__restrict__ x, float *__restrict__ y, int 
         partial_sum4.w += temp4.w;
     }
     float partial_sum = partial_sum4.x + partial_sum4.y + partial_sum4.z + partial_sum4.w;
-    warp.sync();
 
     //* Using the warp level functions
     partial_sum = cg::reduce(warp, partial_sum, cg::plus<float>());
 
     if (warp.thread_rank() == 0) {
-        atomicAdd(&y[block.group_index().x], partial_sum);
+        // atomicAdd(&y[block.group_index().x], partial_sum);
+        cuda::atomic_ref<float, cuda::thread_scope_thread> atomic_result(*y);
+        atomic_result.fetch_add(partial_sum, cuda::memory_order_relaxed);
     }
 }
 
@@ -75,19 +93,21 @@ template <typename T>
 void device_reduce7(
   thrust::device_vector<T> &d_x, thrust::device_vector<T> &d_y, const int N, const int blocks, const int threads) {
     RANGE("device call");
-    reduce7<<<blocks, threads, threads * sizeof(T)>>>(d_x.data().get(), d_y.data().get(), N);
-    reduce7<<<1, blocks, blocks * sizeof(T)>>>(d_y.data().get(), d_x.data().get(), blocks);
+    reduce7<<<blocks, threads>>>(d_x.data().get(), d_y.data().get(), N);
+    RUNTIME_API_CALL(cudaGetLastError());
+    // reduce7<<<1, blocks>>>(d_y.data().get(), d_x.data().get(), blocks);
+    // RUNTIME_API_CALL(cudaGetLastError());
 }
 
 int main(int argc, char *argv[]) {
-    int N       = (argc > 1) ? atoi(argv[1]) : 1 << 24; // default 2**24
-    int blocks  = (argc > 2) ? atoi(argv[2]) : 256;
-    int threads = (argc > 3) ? atoi(argv[3]) : 256;
+    int N       = (argc > 1) ? 1 << atoi(argv[1]) : 1 << 24; // default 2**24
+    int blocks  = (argc > 2) ? 1 << atoi(argv[2]) : 1 << 8;
+    int threads = (argc > 3) ? 1 << atoi(argv[3]) : 1 << 8;
     int nreps   = (argc > 4) ? atoi(argv[4]) : 100;
 
     thrust::host_vector<float>   x(N);
     thrust::device_vector<float> dev_x(N);
-    thrust::device_vector<float> dev_y(blocks);
+    thrust::device_vector<float> dev_y(1);
 
     // initialise x with random numbers and copy to dx
     init_data(x);
@@ -95,20 +115,17 @@ int main(int argc, char *argv[]) {
     dev_x          = x; // H2D copy (N words)
     float host_sum = host_reduce7(x);
 
-    double gpu_sum = 0.0;
     for (int rep{0}; rep < nreps; ++rep) {
         device_reduce7(dev_x, dev_y, N, blocks, threads);
-        if (rep == 0)
-            gpu_sum = dev_x[0];
     }
-    cudaDeviceSynchronize();
+    RUNTIME_API_CALL(cudaDeviceSynchronize());
 
     // ! NOTE : Due to round off we off by 1
     // clang-format off
     std::cout << "Sum of " << N << " random Numbers in reduce7" 
               << "\n\thost : " << std::fixed << host_sum 
-              << "\n\tGPU  : " << std::fixed << gpu_sum 
-              << "\nand " << (host_sum == gpu_sum   ? "✅ Sum Match " : "❌ Not Match ") 
+              << "\n\tGPU  : " << std::fixed << dev_y[0] 
+              << "\nand " << (host_sum == dev_y[0]   ? "✅ Sum Match " : "❌ Not Match ") 
               << std::endl;
     // clang-format on
     return 0;
